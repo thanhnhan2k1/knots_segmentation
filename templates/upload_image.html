@@ -1,0 +1,14 @@
+{% extends 'index.html' %}
+{% block head %}
+<title>Result Page</title>
+{% endblock %}
+{% block body %}
+    <img src= "{{ image_link }}" alt = "No image">
+    <br>
+    <img src= "{{ result_link }}" alt = "No image">
+    <br>
+    <h4> Total of single knot: {{ number_single }} </h4>
+    <h4> Total of double knot: {{ number_double }} </h4>
+    <h4> Average area of single knot: {{ area_single }} </h4>
+    <h4> Average area of double knot: {{ area_double }} </h4>
+{% endblock %}
