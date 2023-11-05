@@ -32,7 +32,8 @@ def index():
 def predict_knot():
     image = request.args.get('image')
     result = predict.predict_image_remote(image)
-    result_url = storage.upload_image_to_firebase("images/result.jpg")
+    date = image.split(".")[0].split("_")[-1]
+    result_url = storage.upload_image_to_firebase("images/result_"+date+".jpg", date)
     if result != None:
         number_of_single, number_of_double, average_area_single, average_area_double = predict.get_average_area(result)
         output = Output(number_of_single, number_of_double, average_area_single, average_area_double)
@@ -51,4 +52,3 @@ def upload_image():
     
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)
-    # index()

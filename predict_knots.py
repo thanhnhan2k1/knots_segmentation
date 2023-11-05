@@ -48,7 +48,7 @@ def predict_image_local(img_dir):
     cv2.imwrite("images/result.jpg", out.get_image()[:, :, ::-1])
     return outputs
 
-def predict_image_remote(image):
+def predict_image_remote(imageName):
     cfg = get_cfg()
     cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
     cfg.MODEL.WEIGHTS = os.path.join("model_final.pth")  # path to the model we just trained
@@ -60,8 +60,9 @@ def predict_image_remote(image):
     cfg.MODEL.DEVICE = "cpu"
 
     predictor = DefaultPredictor(cfg)
-    image = storage.download_image(image)
-    im = cv2.imread("images/image_remote.jpg")
+    image_path = storage.download_image(imageName)
+    date = imageName.split(".")[0].split("_")[-1]
+    im = cv2.imread(image_path)
     outputs = predictor(im)
     v = Visualizer(im[:, :, ::-1],
                     metadata= test_metadata,
@@ -69,7 +70,7 @@ def predict_image_remote(image):
                     instance_mode=ColorMode.IMAGE_BW   # remove the colors of unsegmented pixels. This option is only available for segmentation models
         )
     out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-    cv2.imwrite("images/result.jpg", out.get_image()[:, :, ::-1])
+    cv2.imwrite("images/result_" + date + ".jpg", out.get_image()[:, :, ::-1])
     return outputs
 
 def get_quantity_knots(outputs):
